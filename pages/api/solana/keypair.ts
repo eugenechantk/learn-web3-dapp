@@ -1,5 +1,5 @@
 import type {NextApiRequest, NextApiResponse} from 'next';
-import {Keypair} from '@solana/web3.js';
+import {Keypair, PublicKey} from '@solana/web3.js';
 
 type ResponseT = {
   secret: string;
@@ -10,8 +10,8 @@ export default function keypair(
   res: NextApiResponse<string | ResponseT>,
 ) {
   try {
-    const keypair = undefined;
-    const address = undefined;
+    const keypair = Keypair.generate();
+    const address = keypair?.publicKey.toString();
     const secret = JSON.stringify(Array.from(keypair.secretKey));
     res.status(200).json({
       secret,
