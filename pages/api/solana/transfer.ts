@@ -7,6 +7,7 @@ import {
   Transaction,
   sendAndConfirmTransaction,
 } from '@solana/web3.js';
+import {Signer} from 'near-api-js';
 
 export default async function transfer(
   req: NextApiRequest,
@@ -27,13 +28,22 @@ export default async function transfer(
     const instructions = SystemProgram.transfer;
 
     // How could you construct a signer array's
-    const signers = undefined;
+    const signers = [
+      {
+        publicKey: fromPubkey,
+        secretKey,
+      },
+    ];
 
     // Maybe adding something to a Transaction could be interesting ?
-    const transaction = new Transaction();
+    const transaction = new Transaction().add(instructions);
 
     // We can send and confirm a transaction in one row.
-    const hash = undefined;
+    const hash = await sendAndConfirmTransaction(
+      connection,
+      transaction,
+      signers,
+    );
 
     res.status(200).json(hash);
   } catch (error) {
